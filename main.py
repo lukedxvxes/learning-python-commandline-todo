@@ -20,7 +20,7 @@ def format_string(string):
 
 
 while True:
-    user_action = input("Type add, show, edit. complete or exit: ")
+    user_action = input("Type add, show, edit, complete or exit: ")
     user_action = user_action.strip()
 
     match user_action:
@@ -34,8 +34,11 @@ while True:
             write_todos(todos)
         case "show":
             todos = read_todos()
+            # example of inline for-loop or list comprehension
+            # for each item in todos, return item.strip
+            formatted_todos = [item.strip('\n') for item in todos]
 
-            for index, item in enumerate(todos):
+            for index, item in enumerate(formatted_todos):
                 index = index + 1
                 formattedStr = f"{index}-{item}"
                 print(formattedStr)
