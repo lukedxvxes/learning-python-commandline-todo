@@ -11,14 +11,19 @@ while True:
             todo = input(user_prompt)
             todos.append(todo)
         case "show":
-            for item in todos:
-                print(item)
+            for index, item in enumerate(todos):
+                index = index + 1
+                formattedStr = f"{index}-{item}"
+                print(formattedStr)
         case "edit":
             editItem = input("which item do you want to edit?")
-            editItem = editItem.strip()
-            if editItem in todos:
-                editIndex = todos.index(editItem)
-                todos[editIndex] = input("update " + editItem + " to be: ")
+
+            if int(editItem) <= len(todos):
+                editItem = int(editItem) - 1
+                todos[editItem] = input("update " + todos[editItem] + " to be: ")
+            else:
+                print("item doesnt exit")
+
         case "exit":
             break
         case _:
