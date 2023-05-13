@@ -3,16 +3,16 @@ todo_file = 'todos.txt'
 
 
 def read_todos():
-    existing_file = open(todo_file, 'r')
-    todo_list = existing_file.readlines()
-    existing_file.close()
-    return todo_list
+    # Using with-context-manager, removes need to manually close the file
+    with open(todo_file, 'r') as file:
+        todo_list = file.readlines()
+        return todo_list
 
 
 def write_todos(todos_list):
-    new_file = open(todo_file, 'w')
-    new_file.writelines(todos_list)
-    new_file.close()
+    # Using with-context-manager, removes need to manually close the file
+    with open(todo_file, 'w') as file:
+        file.writelines(todos_list)
 
 
 def format_string(string):
@@ -20,54 +20,54 @@ def format_string(string):
 
 
 while True:
-    user_action = input("Type add, show, edit, complete or exit: ")
+    user_action = input("Type add [todo], show, edit [todo num], complete [todo num] or exit: ")
     user_action = user_action.strip()
 
-    match user_action:
-        case "add":
-            todo = format_string(input(user_prompt))
+    if user_action.startswith("add"):
+        todo = format_string(user_action[4:])
 
-            todos = read_todos()
+        todos = read_todos()
 
-            todos.append(todo)
+        todos.append(todo)
 
+        write_todos(todos)
+
+    elif user_action.startswith("show"):
+        todos = read_todos()
+        # example of inline for-loop or list comprehension
+        # for each item in todos, return item.strip
+        formatted_todos = [item.strip('\n') for item in todos]
+
+        for index, item in enumerate(formatted_todos):
+            index = index + 1
+            formattedStr = f"{index}-{item}"
+            print(formattedStr)
+
+    elif user_action.startswith("edit"):
+        editItem = int(user_action[5:])
+        todos = read_todos()
+
+        if editItem <= len(todos):
+            editItem = editItem - 1
+            todos[editItem] = format_string(input("update " + todos[editItem] + " to be: "))
             write_todos(todos)
-        case "show":
-            todos = read_todos()
-            # example of inline for-loop or list comprehension
-            # for each item in todos, return item.strip
-            formatted_todos = [item.strip('\n') for item in todos]
+        else:
+            print("item doesnt exit")
 
-            for index, item in enumerate(formatted_todos):
-                index = index + 1
-                formattedStr = f"{index}-{item}"
-                print(formattedStr)
+    elif user_action.startswith("complete"):
+        todos = read_todos()
+        completedItem = int(user_action[9:])
 
-        case "edit":
-            editItem = int(input("which item do you want to edit?"))
-            todos = read_todos()
+        if completedItem <= len(todos):
+            todos.pop(completedItem - 1)
+            write_todos(todos)
+        else:
+            print("item doesnt exist")
 
-            if editItem <= len(todos):
-                editItem = editItem - 1
-                todos[editItem] = format_string(input("update " + todos[editItem] + " to be: "))
-                write_todos(todos)
-            else:
-                print("item doesnt exit")
+    elif user_action.startswith("exit"):
+        break
 
-        case "complete":
-            todos = read_todos()
-            completedItem = int(input("Which item number did you complete?"))
-
-            if completedItem <= len(todos):
-                todos.pop(completedItem - 1)
-                write_todos(todos)
-            else:
-                print("item doesnt exist")
-
-        case "exit":
-            break
-
-        case _:
-            print("That's not a valid command")
+    else:
+        print("Not a valid command")
 
 print("Bye!")
