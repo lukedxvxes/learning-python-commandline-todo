@@ -1,3 +1,14 @@
+
+def get_user_action():
+    action = input("Type add [todo], show, edit [todo num], complete [todo num] or exit: ")
+    action = action.strip()
+    return action
+
+
+def format_string(string):
+    return string + '\n'
+
+
 def read_todos(filepath='todos.txt'):
     # Using with-context-manager, removes need to manually close the file
     with open(filepath, 'r') as file:
@@ -9,16 +20,6 @@ def write_todos(todos_list, filepath='todos.txt'):
     # Using with-context-manager, removes need to manually close the file
     with open(filepath, 'w') as file:
         file.writelines(todos_list)
-
-
-def format_string(string):
-    return string + '\n'
-
-
-def get_user_action():
-    action = input("Type add [todo], show, edit [todo num], complete [todo num] or exit: ")
-    action = action.strip()
-    return action
 
 
 def add_todo(action):

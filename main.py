@@ -1,21 +1,21 @@
-from functions import get_user_action, \
-    add_todo, \
-    show_todos, \
-    edit_todo, \
-    complete_todo
+import functions
+import time
+
+print(time.strftime("%b %d, %Y %H:%M"))
 
 while True:
-    user_action = get_user_action()
+
+    user_action = functions.get_user_action()
 
     if user_action.startswith("add"):
-        add_todo(user_action)
+        functions.add_todo(user_action)
 
     elif user_action.startswith("show"):
-        show_todos()
+        functions.show_todos()
 
     elif user_action.startswith("edit"):
         try:
-            edit_todo(user_action)
+            functions.edit_todo(user_action)
         except IndexError:
             print("item doesnt exit")
             continue
@@ -25,7 +25,7 @@ while True:
 
     elif user_action.startswith("complete"):
         try:
-            complete_todo(user_action)
+            functions.complete_todo(user_action)
         except IndexError:
             print("Item doesnt exist")
             continue
